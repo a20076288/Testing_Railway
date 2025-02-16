@@ -7,7 +7,7 @@
     "license": "MIT",
     
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "filament/filament": "^3.2",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
@@ -70,7 +70,16 @@
 
     "config": {
         "platform": {
-            "php": "8.3"
+            "php": "8.3",
+            "ext-intl": "*",
+            "ext-pdo": "*",
+            "ext-pdo_mysql": "*",
+            "ext-zip": "*",
+            "ext-mbstring": "*",
+            "ext-openssl": "*",
+            "ext-json": "*",
+            "ext-tokenizer": "*",
+            "ext-fileinfo": "*"
         },
         "preferred-install": "dist",
         "optimize-autoloader": true,
