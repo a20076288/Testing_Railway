@@ -2,17 +2,21 @@
 FROM php:8.3-fpm
 
 # Instalar dependências do sistema e extensões PHP
+# Instalar pacotes necessários
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
     git \
     curl \
+    nano \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
     libonig-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd zip pdo_mysql mbstring bcmath intl
+    && docker-php-ext-install gd zip pdo_mysql mbstring bcmath
+
+RUN apt-get update && apt-get install -y libicu-dev && docker-php-ext-install intl
 
 # Instalar o Composer
 RUN curl -sS https://getcomposer.org/installer | php -- \
