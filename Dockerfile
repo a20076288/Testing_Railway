@@ -24,22 +24,27 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 
 WORKDIR /var/www/html
 
-# Passo 1: Criar estrutura do Laravel vazia
-RUN composer create-project laravel/laravel tmp-laravel --no-interaction --no-install
+# Passo 1: Criar estrutura do Laravel completa (com dependências)
+RUN composer create-project laravel/laravel tmp-laravel --no-interaction --no-scripts
 
-# Passo 2: Remover pastas padrão do Laravel
+# Passo 2: Remover pastas padrão que serão substituídas
 RUN rm -rf tmp-laravel/app tmp-laravel/database tmp-laravel/config
 
-# Passo 3: Copiar SEUS arquivos para a estrutura do Laravel
+# Passo 3: Copiar SEUS arquivos para dentro da estrutura
 COPY . ./tmp-laravel
 
 # Passo 4: Mover tudo para o diretório principal
 RUN mv tmp-laravel/* . && mv tmp-laravel/.* . 2>/dev/null || true
 
-# Passo 5: Instalar dependências
-RUN composer install --ignore-platform-reqs --no-scripts --no-autoloader
+# Passo 5: Instalar dependências adicionais
+RUN composer install --ignore-platform-reqs --no-scripts
 
-# Passo 6: Configurar permissões
+# Passo 6: Executar comandos pós-instalação
+RUN composer run-script post-autoload-dump \
+    && php artisan key:generate --force \
+    && php artisan config:cache
+
+# Configurar permissões
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
