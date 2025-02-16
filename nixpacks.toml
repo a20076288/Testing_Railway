@@ -1,9 +1,22 @@
 [phases.setup]
-nixPkgs = ["php82"]
+nixPkgs = [
+    "php82",
+    "php82.extensions.pdo",
+    "php82.extensions.mbstring",
+    "php82.extensions.openssl",
+    "php82.extensions.json",
+    "php82.extensions.gd",
+    "php82.extensions.fileinfo",
+    "composer",  # Adicione esta linha!
+    "mysql57"
+]
 
 [phases.build]
 commands = [
     "composer install --ignore-platform-reqs --no-dev --optimize-autoloader",
+    "php artisan config:cache",
+    "php artisan route:cache",
+    "php artisan view:cache",
     "php artisan migrate --force"
 ]
 
