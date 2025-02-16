@@ -7,8 +7,8 @@ nixPkgs = [
     "php82Extensions.openssl",
     "php82Extensions.json",
     "php82Extensions.gd",
-    "php82Extensions.fileinfo",
-    "mysql57"
+    "php82Extensions.fileinfo"
+    
 ]
 
 [phases.build]
