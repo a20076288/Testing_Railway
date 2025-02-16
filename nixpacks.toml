@@ -1,12 +1,12 @@
 [phases.setup]
 nixPkgs = [
     "php82",
-    "php83Extensions.pdo",
-    "php83Extensions.mbstring",
-    "php83Extensions.openssl",
-    "php83Extensions.json",
-    "php83Extensions.gd",         # Necessário para o Filament
-    "php83Extensions.fileinfo",   # Necessário para o Laravel
+    "php82Extensions.pdo",
+    "php82Extensions.mbstring",
+    "php82Extensions.openssl",
+    "php82Extensions.json",
+    "php82Extensions.gd",         # Necessário para o Filament
+    "php82Extensions.fileinfo",   # Necessário para o Laravel
     "mysql57"                     # Cliente MySQL para migrations
 ]
 
