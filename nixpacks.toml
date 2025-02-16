@@ -6,6 +6,7 @@ nixPkgs = [
 
 [phases.build]
 commands = [
+    "composer create-project laravel/laravel . --no-interaction",  # Inicializa o Laravel
     "composer install --ignore-platform-reqs --no-dev --optimize-autoloader",
     "php artisan migrate --force"
 ]
