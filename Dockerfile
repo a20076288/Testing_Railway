@@ -18,40 +18,32 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get update && apt-get install -y libicu-dev && docker-php-ext-install intl
 
-# Instalar o Composer
+# Instalar Composer
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/local/bin --filename=composer
 
-# Definir diretório de trabalho
 WORKDIR /var/www/html
 
-# Copiar APENAS composer.json e composer.lock primeiro (para cache de dependências)
-COPY composer.json composer.lock ./
+# Passo 1: Criar estrutura do Laravel vazia
+RUN composer create-project laravel/laravel tmp-laravel --no-interaction --no-install
 
-# Instalar dependências do Composer (sem scripts para evitar erros)
+# Passo 2: Remover pastas padrão do Laravel
+RUN rm -rf tmp-laravel/app tmp-laravel/database tmp-laravel/config
+
+# Passo 3: Copiar SEUS arquivos para a estrutura do Laravel
+COPY . ./tmp-laravel
+
+# Passo 4: Mover tudo para o diretório principal
+RUN mv tmp-laravel/* . && mv tmp-laravel/.* . 2>/dev/null || true
+
+# Passo 5: Instalar dependências
 RUN composer install --ignore-platform-reqs --no-scripts --no-autoloader
 
-# Copiar o restante do projeto
-COPY . .
+# Passo 6: Configurar permissões
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
-# Criar projeto Laravel dentro do container (substituindo app/database)
-RUN composer create-project laravel/laravel tmp-laravel --no-interaction \
-    && rm -rf tmp-laravel/app tmp-laravel/database \
-    && mv app tmp-laravel/app \
-    && mv database tmp-laravel/database \
-    && mv tmp-laravel/* . \
-    && rm -rf tmp-laravel
+# Limpar arquivos temporários
+RUN rm -rf tmp-laravel
 
-# Gerar autoloader otimizado e executar scripts do Laravel
-RUN composer dump-autoload --optimize \
-    && composer run-script post-autoload-dump
-
-# Configurar permissões
-RUN chown -R www-data:www-data /var/www/html/storage \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Expor a porta do PHP-FPM
-EXPOSE 9000
-
-# Comando de inicialização (PHP-FPM + Nginx)
 CMD ["php-fpm"]
