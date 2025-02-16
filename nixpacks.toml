@@ -1,5 +1,8 @@
 [phases.setup]
-nixPkgs = ["php82", "composer"]
+nixPkgs = [
+    "php82",
+    "php82Packages.composer"  # Nome exato do pacote Composer para PHP 8.2
+]
 
 [phases.build]
 commands = [
