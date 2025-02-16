@@ -8,7 +8,7 @@ nixPkgs = [
     "php82.extensions.gd",
     "php82.extensions.fileinfo",
     "composer",  # Adicione esta linha!
-    "mysql57"
+    
 ]
 
 [phases.build]
