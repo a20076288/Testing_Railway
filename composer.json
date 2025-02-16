@@ -62,13 +62,22 @@
         }
     },
     "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "php-http/discovery": true
-        }
+    "platform": {
+        "php": "8.2",
+        "ext-pdo": "1.0.0",
+        "ext-mbstring": "1.0.0",
+        "ext-json": "1.0.0",
+        "ext-openssl": "1.0.0",
+        "ext-fileinfo": "1.0.0",
+        "ext-gd": "1.0.0"
+    },
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "allow-plugins": {
+        "pestphp/pest-plugin": true,
+        "php-http/discovery": true
+    }
     },
     "minimum-stability": "stable",
     "prefer-stable": true

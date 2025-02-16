@@ -5,9 +5,9 @@ nixPkgs = [
     "php82Extensions.mbstring",
     "php82Extensions.openssl",
     "php82Extensions.json",
-    "php82Extensions.gd",         # Necessário para o Filament
-    "php82Extensions.fileinfo",   # Necessário para o Laravel
-    "mysql57"                     # Cliente MySQL para migrations
+    "php82Extensions.gd",
+    "php82Extensions.fileinfo",
+    "mysql57"
 ]
 
 [phases.build]
