@@ -1,14 +1,14 @@
 [phases.setup]
 nixPkgs = [
     "php82",
-    "php82.extensions.pdo",
-    "php82.extensions.mbstring",
-    "php82.extensions.openssl",
-    "php82.extensions.json",
-    "php82.extensions.gd",
-    "php82.extensions.fileinfo",
-    "composer",  # Adicione esta linha!
-    
+    "php82Packages.composer",  # Nome correto do Composer para PHP 8.2
+    "php82Extensions.pdo",
+    "php82Extensions.mbstring",
+    "php82Extensions.openssl",
+    "php82Extensions.json",
+    "php82Extensions.gd",
+    "php82Extensions.fileinfo",
+    "mysql57"
 ]
 
 [phases.build]
