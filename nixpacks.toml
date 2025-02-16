@@ -6,8 +6,22 @@ nixPkgs = [
 
 [phases.build]
 commands = [
-    "composer create-project laravel/laravel . --no-interaction",  # Inicializa o Laravel
+    # Cria o Laravel em uma pasta temporária
+    "composer create-project laravel/laravel tmp-laravel --no-interaction",
+    
+    # Move seus arquivos para a estrutura do Laravel
+    "mv app tmp-laravel/app",
+    "mv database tmp-laravel/database",
+    "mv composer.json tmp-laravel/composer.json",
+    
+    # Define a pasta temporária como a raiz do projeto
+    "mv tmp-laravel/* .",
+    "rm -rf tmp-laravel",
+    
+    # Instala dependências
     "composer install --ignore-platform-reqs --no-dev --optimize-autoloader",
+    
+    # Executa migrations
     "php artisan migrate --force"
 ]
 
