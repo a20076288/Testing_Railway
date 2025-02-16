@@ -2,17 +2,19 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "Projeto de Gestão de Férias com Laravel e Filament",
+    "keywords": ["laravel", "filament", "framework"],
     "license": "MIT",
+    
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "filament/filament": "^3.2",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
         "saade/filament-fullcalendar": "^3.0",
         "spatie/laravel-permission": "^6.12"
     },
+
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.1",
@@ -22,6 +24,7 @@
         "nunomaduro/collision": "^8.1",
         "phpunit/phpunit": "^11.0.1"
     },
+
     "autoload": {
         "psr-4": {
             "App\\": "app/",
@@ -29,11 +32,13 @@
             "Database\\Seeders\\": "database/seeders/"
         }
     },
+
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
         }
     },
+
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
@@ -48,26 +53,32 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi",
-            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
         ],
-        "dev": [
-            "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
+        "build": [
+            "@php artisan config:cache",
+            "@php artisan route:cache",
+            "@php artisan view:cache"
         ]
     },
+
     "extra": {
         "laravel": {
             "dont-discover": []
         }
     },
+
     "config": {
-    "platform": {
-        "php": "8.3"
-    },
-    "preferred-install": "dist",
-    "optimize-autoloader": true,
-    "sort-packages": true
+        "platform": {
+            "php": "8.3"
+        },
+        "preferred-install": "dist",
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        }
     },
 
     "minimum-stability": "stable",
