@@ -36,11 +36,11 @@ return [
         ],
 
         // ✅ MYSQL — Forçado para Railway
-        'mysql' => [
+        // ✅ Corrige o MySQL com getenv() e variáveis consistentes
+'mysql' => [
     'driver' => 'mysql',
-    'url' => env('DATABASE_URL'),
     'host' => env('DB_HOST', getenv('MYSQLHOST') ?: '127.0.0.1'),
-    'port' => env('DB_PORT', '3306'),
+    'port' => env('DB_PORT', getenv('MYSQLPORT') ?: '3306'),
     'database' => env('DB_DATABASE', getenv('MYSQLDATABASE') ?: 'railway'),
     'username' => env('DB_USERNAME', getenv('MYSQLUSER') ?: 'root'),
     'password' => env('DB_PASSWORD', getenv('MYSQLPASSWORD') ?: ''),
@@ -51,6 +51,7 @@ return [
     'strict' => true,
     'engine' => null,
 ],
+
 
 
         // MARIA DB
