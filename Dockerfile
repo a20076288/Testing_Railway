@@ -43,19 +43,18 @@ RUN php artisan key:generate --show \
     && php artisan key:generate --force \
     && echo "APP_KEY gerada: $(php artisan key:generate --show)"
 
-# 9. Executar inspeção de rotas e configuração do Filament antes do deploy
-RUN composer run-script pre-deploy \
-    && php artisan --version
+# 9. Executar instalação do painel Filament automaticamente
+RUN composer run-script pre-deploy
 
-# 2. Executar migrações com forço à conexão correta
+# 10. Executar migrações
 RUN php artisan migrate --force --database=mysql 
 
-# 10. Corrigir permissões
+# 11. Corrigir permissões
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# 11. Expor a porta padrão do PHP-FPM
+# 12. Expor a porta padrão do PHP-FPM
 EXPOSE 8080
 
-# Comando para iniciar
+# 13. Comando para iniciar
 CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
