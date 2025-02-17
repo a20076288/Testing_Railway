@@ -62,4 +62,8 @@ RUN php artisan migrate --force --database=mysql
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
+# 11. Expor a porta padrão do PHP-FPM
+EXPOSE 8080
 
+# Comando padrão ao iniciar o container
+CMD ["php-fpm"]
