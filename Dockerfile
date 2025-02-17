@@ -59,11 +59,23 @@ ENV DB_USERNAME=$DB_USERNAME
 ENV DB_PASSWORD=$DB_PASSWORD
 
 # 9. Executar migrações e caches essenciais
+# Passar variáveis de ambiente para o PHP
+ARG MYSQLHOST
+ARG MYSQLUSER
+ARG MYSQLPASSWORD
+ARG MYSQLDATABASE
+
+ENV DB_HOST=$MYSQLHOST
+ENV DB_DATABASE=$MYSQLDATABASE
+ENV DB_USERNAME=$MYSQLUSER
+ENV DB_PASSWORD=$MYSQLPASSWORD
+
 RUN php artisan storage:link \
     && php artisan migrate --force \
     && php artisan config:cache \
     && php artisan route:cache \
     && php artisan view:cache
+
 
 # 10. Corrigir permissões
 RUN chown -R www-data:www-data storage bootstrap/cache \
