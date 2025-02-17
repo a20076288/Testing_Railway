@@ -57,14 +57,20 @@ ENV DB_DATABASE=$MYSQLDATABASE
 ENV DB_USERNAME=$MYSQLUSER
 ENV DB_PASSWORD=$MYSQLPASSWORD
 
-# ✅ 10. Limpar caches e executar migrações
-RUN php artisan config:clear \
+# Adicionar o script de espera
+COPY wait-for-db.sh /wait-for-db.sh
+RUN chmod +x /wait-for-db.sh
+
+# Executar script de espera antes das migrações
+RUN /wait-for-db.sh \
+    && php artisan config:clear \
     && php artisan cache:clear \
     && php artisan storage:link \
     && php artisan migrate --force \
     && php artisan config:cache \
     && php artisan route:cache \
     && php artisan view:cache
+
 
 # ✅ 11. Corrigir permissões
 RUN chown -R www-data:www-data storage bootstrap/cache \
