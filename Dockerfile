@@ -43,6 +43,21 @@ RUN php artisan key:generate --show \
     && php artisan key:generate --force \
     && echo "APP_KEY gerada: $(php artisan key:generate --show)"
 
+# Adiciona variáveis ao Dockerfile para garantir que estão no build
+ARG DB_CONNECTION=mysql
+ARG DB_HOST=mysql.railway.internal
+ARG DB_PORT=3306
+ARG DB_DATABASE=railway
+ARG DB_USERNAME=root
+ARG DB_PASSWORD=sua_senha
+
+ENV DB_CONNECTION=$DB_CONNECTION
+ENV DB_HOST=$DB_HOST
+ENV DB_PORT=$DB_PORT
+ENV DB_DATABASE=$DB_DATABASE
+ENV DB_USERNAME=$DB_USERNAME
+ENV DB_PASSWORD=$DB_PASSWORD
+
 # 9. Executar migrações e caches essenciais
 RUN php artisan storage:link \
     && php artisan migrate --force \
