@@ -42,14 +42,24 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 RUN php artisan key:generate --show \
     && php artisan key:generate --force \
     && echo "APP_KEY gerada: $(php artisan key:generate --show)"
-    
 
-# 9. Executar migrações e caches essenciais
-RUN php artisan storage:link \
+# Passar variáveis de ambiente para o Laravel
+ENV DB_HOST=${MYSQL_PUBLIC_URL}
+ENV DB_PORT=${MYSQLPORT}
+ENV DB_DATABASE=${MYSQL_DATABASE}
+ENV DB_USERNAME=${MYSQLUSER}
+ENV DB_PASSWORD=${MYSQLPASSWORD}
+
+# Executar migrações com as novas variáveis
+RUN php artisan config:clear \
+    && php artisan cache:clear \
+    && php artisan storage:link \
     && php artisan migrate --force \
     && php artisan config:cache \
     && php artisan route:cache \
     && php artisan view:cache
+
+
 
 # 10. Corrigir permissões
 RUN chown -R www-data:www-data storage bootstrap/cache \
