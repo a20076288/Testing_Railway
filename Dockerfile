@@ -43,24 +43,12 @@ RUN php artisan key:generate --show \
     && php artisan key:generate --force \
     && echo "APP_KEY gerada: $(php artisan key:generate --show)"
 
-# 1. Passar variáveis de ambiente corretamente
-ENV DB_CONNECTION=mysql
-ENV DB_HOST=centerbeam.proxy.rlwy.net
-ENV DB_PORT=52118
-ENV DB_DATABASE=railway
-ENV DB_USERNAME=root
-ENV DB_PASSWORD=qGhJqVJXGovATqwsFTGIwFNwwGjDSLCs
+# 9. Executar inspeção de rotas e configuração do Filament antes do deploy
+RUN composer run-script pre-deploy \
+    && php artisan --version
 
 # 2. Executar migrações com forço à conexão correta
-RUN php artisan config:clear \
-    && php artisan cache:clear \
-    && php artisan migrate --force --database=mysql \
-    && php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
-
-
-
+RUN php artisan migrate --force --database=mysql 
 
 # 10. Corrigir permissões
 RUN chown -R www-data:www-data storage bootstrap/cache \
