@@ -66,4 +66,4 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
 EXPOSE 8080
 
 # Comando para iniciar
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
+CMD ["php", "-S", "0.0.0.0:8080/admin", "-t", "public"]
