@@ -52,13 +52,8 @@ ENV DB_USERNAME=root
 ENV DB_PASSWORD=qGhJqVJXGovATqwsFTGIwFNwwGjDSLCs
 
 # 2. Executar migrações com forço à conexão correta
-RUN php artisan config:clear \
-    && php artisan cache:clear \
-    && php artisan storage:link \
-    && php artisan migrate --force --database=mysql \
-    && php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
+RUN php artisan migrate --force --database=mysql 
+   
 
 
 
