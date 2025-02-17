@@ -28,12 +28,13 @@ return [
 
         // 🚫 REMOVIDO SQLITE COMO DEFAULT (para evitar confusão)
         'sqlite' => [
-            'driver' => 'sqlite',
-            'url' => env('DB_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
-            'prefix' => '',
-            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
-        ],
+    'driver' => 'sqlite',
+    'url' => env('DB_URL'),
+    'database' => env('DB_DATABASE', null),
+    'prefix' => '',
+    'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
+],
+
 
         // ✅ MYSQL — Forçado para Railway
         'mysql' => [

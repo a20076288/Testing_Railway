@@ -43,21 +43,23 @@ RUN php artisan key:generate --show \
     && php artisan key:generate --force \
     && echo "APP_KEY gerada: $(php artisan key:generate --show)"
 
-# Passar variáveis de ambiente para o Laravel
+# 1. Passar variáveis de ambiente corretamente
+ENV DB_CONNECTION=mysql
 ENV DB_HOST=${MYSQL_PUBLIC_URL}
 ENV DB_PORT=${MYSQLPORT}
 ENV DB_DATABASE=${MYSQL_DATABASE}
 ENV DB_USERNAME=${MYSQLUSER}
 ENV DB_PASSWORD=${MYSQLPASSWORD}
 
-# Executar migrações com as novas variáveis
+# 2. Executar migrações com forço à conexão correta
 RUN php artisan config:clear \
     && php artisan cache:clear \
     && php artisan storage:link \
-    && php artisan migrate --force \
+    && php artisan migrate --force --database=mysql \
     && php artisan config:cache \
     && php artisan route:cache \
     && php artisan view:cache
+
 
 
 
