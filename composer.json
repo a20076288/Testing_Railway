@@ -38,7 +38,11 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",
-            "@php artisan filament:upgrade"
+            "@php artisan filament:upgrade",
+             "@php artisan vendor:publish --tag=livewire:assets --ansi --force",
+        "@php artisan vendor:publish --tag=filament-assets --ansi --force",
+        "@php artisan vendor:publish --tag=filament-config --ansi --force",
+        "@php artisan vendor:publish --tag=saade-calendar-assets --ansi --force"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
