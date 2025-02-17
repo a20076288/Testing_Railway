@@ -1,8 +1,10 @@
-# Usar a imagem oficial do PHP 8.3 com FPM
+# 1. Usar a imagem oficial do PHP 8.3 com FPM
 FROM php:8.3-fpm
 
-# Instalar dependências do sistema e extensões PHP
-# Instalar pacotes necessários
+# 2. Definir diretório de trabalho
+WORKDIR /var/www/html
+
+# 3. Instalar extensões necessárias para o Laravel
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
@@ -13,42 +15,47 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libfreetype6-dev \
     libonig-dev \
+    libicu-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd zip pdo_mysql mbstring bcmath
+    && docker-php-ext-install gd zip pdo_mysql mbstring bcmath intl \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y libicu-dev && docker-php-ext-install intl
+# 4. Instalar Composer
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
-# Instalar Composer
-RUN curl -sS https://getcomposer.org/installer | php -- \
-    --install-dir=/usr/local/bin --filename=composer
+# 5. Criar projeto base Laravel (como só tens o código-fonte personalizado)
+RUN composer create-project --prefer-dist laravel/laravel .
 
-WORKDIR /var/www/html
+# 6. Copiar o código personalizado (app, routes, config, etc.)
+COPY ./app /var/www/html/app
+COPY ./config /var/www/html/config
+COPY ./database /var/www/html/database
+COPY ./public /var/www/html/public
+COPY ./resources /var/www/html/resources
+COPY ./routes /var/www/html/routes
+COPY composer.json composer.lock ./
 
-# Passo 1: Criar estrutura do Laravel completa (com dependências)
-RUN composer create-project laravel/laravel tmp-laravel --no-interaction --no-scripts
+# 7. Instalar dependências do Laravel e plugins (Filament, Spatie, Saad Calendar)
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Passo 2: Remover pastas padrão que serão substituídas
-RUN rm -rf tmp-laravel/app tmp-laravel/database tmp-laravel/config
-
-# Passo 3: Copiar SEUS arquivos para dentro da estrutura
-COPY . ./tmp-laravel
-
-# Passo 4: Mover tudo para o diretório principal
-RUN mv tmp-laravel/* . && mv tmp-laravel/.* . 2>/dev/null || true
-
-# Passo 5: Instalar dependências adicionais
-RUN composer install --ignore-platform-reqs --no-scripts
-
-# Passo 6: Executar comandos pós-instalação
-RUN composer run-script post-autoload-dump \
+# 8. Gerar e Mostrar a APP_KEY nos logs do Railway
+RUN php artisan key:generate --show \
     && php artisan key:generate --force \
-    && php artisan config:cache
+    && echo "APP_KEY gerada: $(php artisan key:generate --show)"
 
-# Configurar permissões
+# 9. Executar migrações e caches essenciais
+RUN php artisan storage:link \
+    && php artisan migrate --force \
+    && php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache
+
+# 10. Corrigir permissões
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Limpar arquivos temporários
-RUN rm -rf tmp-laravel
+# 11. Expor a porta padrão do PHP-FPM
+EXPOSE 9000
 
+# 12. Comando para iniciar o PHP-FPM
 CMD ["php-fpm"]
