@@ -23,27 +23,17 @@ return [
     | Configuração de todas as bases de dados disponíveis.
     |
     */
-
+ 
     'connections' => [
-
-        // 🚫 REMOVIDO SQLITE COMO DEFAULT (para evitar confusão)
-        'sqlite' => [
-    'driver' => 'sqlite',
-    'url' => env('DB_URL'),
-    'database' => env('DB_DATABASE', null),
-    'prefix' => '',
-    'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
-],
-
 
         // ✅ MYSQL — Forçado para Railway
         'mysql' => [
     'driver' => 'mysql',
-    'host' => env('DB_HOST'),
-    'port' => env('DB_PORT', '3306'),
-    'database' => env('DB_DATABASE'),
-    'username' => env('DB_USERNAME'),
-    'password' => env('DB_PASSWORD'),
+    'host' => 'centerbeam.proxy.rlwy.net',
+    'port' => '52118',
+    'database' => 'railway',
+    'username' => 'root',
+    'password' => 'qGhJqVJXGovATqwsFTGIwFNwwGjDSLCs',
     'charset' => 'utf8mb4',
     'collation' => 'utf8mb4_unicode_ci',
     'prefix' => '',
