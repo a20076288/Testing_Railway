@@ -51,6 +51,7 @@
             "@php artisan config:clear",
             "@php artisan cache:clear",
             "@php artisan migrate --force --ansi --database=mysql"
+            
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
