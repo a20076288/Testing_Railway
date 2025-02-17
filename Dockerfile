@@ -43,13 +43,7 @@ RUN php artisan key:generate --show \
     && php artisan key:generate --force \
     && echo "APP_KEY gerada: $(php artisan key:generate --show)"
 
-# 1. Passar variáveis de ambiente corretamente
-ENV DB_CONNECTION=mysql
-ENV DB_HOST=centerbeam.proxy.rlwy.net
-ENV DB_PORT=52118
-ENV DB_DATABASE=railway
-ENV DB_USERNAME=root
-ENV DB_PASSWORD=qGhJqVJXGovATqwsFTGIwFNwwGjDSLCs
+
 
 # 2. Executar migrações com forço à conexão correta
 RUN php artisan config:clear \
