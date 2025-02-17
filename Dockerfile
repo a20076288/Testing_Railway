@@ -65,5 +65,5 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
 # 11. Expor a porta padrão do PHP-FPM
 EXPOSE 8080
 
-# Comando padrão ao iniciar o container
-CMD ["php-fpm"]
+# Comando para iniciar
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
